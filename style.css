@@ -1,0 +1,520 @@
+/* style.css */
+/* This CSS file styles the homepage for the online learning platform.
+  It uses a theme of white, green, and gray based on the user's provided image.
+*/
+
+/* Basic Reset & Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa; /* A light, clean background */
+    color: #333;
+}
+
+.container {
+     /* Remove this property */
+    max-width: 1800px;
+    
+    /* Remove this property */
+    margin: 0 auto;
+    padding: 0 4vw;
+}
+
+/* Colors */
+:root {
+    --green-dark: #168A48;
+    --green-light: #C6F4D2;
+    --gray-dark: #333333;
+    --gray-light: #f2f2f2;
+    --white: #ffffff;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-login {
+    background-color: transparent;
+    border: 2px solid var(--green-dark);
+    color: var(--green-dark);
+}
+
+.btn-login:hover {
+    background-color: var(--green-dark);
+    color: var(--white);
+}
+
+.btn-signup {
+    background-color: var(--green-dark);
+    color: var(--white);
+    border: 2px solid var(--green-dark);
+}
+
+.btn-signup:hover {
+    background-color: var(--green-light);
+    border-color: var(--green-light);
+    color: var(--green-dark);
+}
+
+.btn-cta {
+    background-color: var(--green-dark);
+    color: var(--white);
+    font-weight: 700;
+    padding: 15px 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(22, 138, 72, 0.4);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-cta:hover {
+    background-color: var(--green-light);
+    color: var(--green-dark);
+    transform: translateY(-3px);
+}
+
+/* Header */
+.header {
+    background-color: var(--white);
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .logo a {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--green-dark);
+    text-decoration: none;
+}
+
+.header .nav a {
+    margin-left: 20px;
+    font-weight: 500;
+    color: var(--gray-dark);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.header .nav a:hover {
+    color: var(--green-dark);
+}
+
+/* Adjusted style for the logo image to control its size */
+.logo-img {
+    max-height: 50px; /* Increased the height to make the logo larger */
+    width: auto;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--white) 0%, #E6F3EA 100%);
+    padding: 7vw 10vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Added for background elements */
+    overflow: hidden; /* To prevent overflow from the animated circle */
+}
+
+/* Added background circles for design */
+.hero-section::before, .hero-section::after {
+    content: '';
+    position: absolute;
+    background-color: var(--green-light);
+    border-radius: 50%;
+    z-index: 0;
+    filter: blur(50px);
+    opacity: 0.5;
+}
+
+.hero-section::before {
+    width: 200px;
+    height: 200px;
+    top: -50px;
+    left: -50px;
+}
+
+.hero-section::after {
+    width: 150px;
+    height: 150px;
+    bottom: -75px;
+    right: -75px;
+}
+
+/* New animated element for design */
+.animated-circle {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background-color: var(--green-light);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(100px);
+    opacity: 0.7;
+    animation: pulse 8s infinite alternate ease-in-out;
+    z-index: 0;
+}
+
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+    100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+}
+
+.hero-section .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    position: relative;
+    z-index: 1; /* Ensures content is on top of background elements */
+}
+
+.hero-content {
+    flex: 1;
+    min-width: 300px;
+}
+
+.hero-content h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem); 
+    font-weight: 700;
+    color: var(--gray-dark);
+    margin-bottom: 20px;
+}
+
+.hero-content h1 span {
+    color: var(--green-dark);
+}
+
+.hero-content p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: #6c757d;
+    margin-bottom: 30px;
+    max-width: 500px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.hero-image {
+    
+    flex: 1;
+    text-align: center;
+    position: relative; /* Added for the pseudo-element and info cards */
+}
+
+/* Added styling details for the hero image */
+.hero-image-circle {
+    width: 100%;
+    border-radius: 50%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* A subtle shadow */
+}
+
+/* Adds a green circular glow behind the image, similar to the provided screenshot */
+.hero-image::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Adjust size as needed */
+    padding-bottom: 80%; /* Creates a circle */
+    background: radial-gradient(circle, var(--green-light) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1; /* Puts it behind the image */
+}
+
+/* Adds the thin dotted circles */
+.hero-image::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: -20px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--green-light) 10%, transparent 11%),
+                radial-gradient(circle, var(--green-light) 10%, transparent 11%);
+    background-size: 10px 10px;
+    z-index: -1;
+    transform: rotate(45deg);
+}
+
+/* Styling for the small floating info cards/buttons */
+.info-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    z-index: 2;
+}
+
+.info-card.card-top {
+    top: 10%;
+    left: -10%;
+}
+
+.info-card.card-bottom {
+    bottom: 10%;
+    right: -10%;
+}
+
+.info-card-icon {
+    width: 40px;
+    height: 40px;
+    background-color: var(--green-light);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-card-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+.info-card-text {
+    font-size: 0.9rem;
+    color: var(--gray-dark);
+}
+
+/* General Section Styles */
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gray-dark);
+    margin-bottom: 50px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: var(--green-light);
+    border-radius: 2px;
+}
+
+/* Features Section */
+.features-section {
+    padding: 80px 0;
+    background-color: var(--white);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.feature-card {
+    text-align: center;
+    background-color: var(--gray-light);
+    padding: 40px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+}
+
+.feature-card img {
+    width: 320px; /* Even larger width */
+    height: 190px; /* Even larger height */
+    margin-bottom: 5px; /* Minimal margin */
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    color: #6c757d;
+}
+
+/* Courses Section */
+.courses-section {
+    padding: 80px 0;
+    background-color: var(--f8f9fa);
+}
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.course-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.course-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-content h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+}
+
+.card-content p {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* About Us Section */
+.about-us-section {
+    padding: 80px 0;
+    background-color: var(--white);
+}
+
+.about-content {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.about-image {
+    flex: 1;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 50%;
+    height: auto;
+}
+
+.about-content p {
+    flex: 1;
+}
+
+/* Footer */
+.footer {
+    background-color: var(--gray-dark);
+    color: var(--white);
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 50px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header .nav a {
+        display: block;
+        margin: 10px 0;
+        text-align: center;
+    }
+    
+    .header .container {
+        flex-direction: column;
+    }
+
+    .nav {
+        margin-top: 15px;
+    }
+
+    .hero-section .container {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .about-content {
+        flex-direction: column;
+    }
+    
+    .about-image {
+        max-width: 100%;
+    }
+}
+/* All Courses Page Grid */
+.all-courses-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* Make sure the grid is responsive on smaller screens */
+@media (max-width: 992px) {
+    .all-courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .all-courses-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Remove underline from course card links */
+.course-card-link {
+    text-decoration: none;
+}
+
+.course-card-link h3,
+.course-card-link p {
+    text-decoration: none;
+}
