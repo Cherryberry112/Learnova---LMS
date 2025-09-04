@@ -23,66 +23,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($courseName) || empty($courseTitle) || empty($courseSummary)) {
         $errorMessage = "Course Name, Title, and Summary are required.";
     } else {
-        try {
-            // Check if course ID already exists
-            $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM courses WHERE id = ?");
-            $stmtCheck->execute([$courseId]);
-            if ($stmtCheck->fetchColumn() > 0) {
-                $errorMessage = "A course with this name already exists. Please choose a different name.";
-            } else {
-                // Begin a transaction
-                $conn->beginTransaction();
+        // Assume user is logged in and their ID is in the session
+        $userId = $_SESSION['user_id'] ?? null;
+        if (!$userId) {
+            $errorMessage = "User not logged in. Please log in to create a course.";
+        } else {
+            try {
+                // Check if course ID already exists
+                $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM courses WHERE id = ?");
+                $stmtCheck->execute([$courseId]);
+                if ($stmtCheck->fetchColumn() > 0) {
+                    $errorMessage = "A course with this name already exists. Please choose a different name.";
+                } else {
+                    // Begin a transaction
+                    $conn->beginTransaction();
 
-                // 1. Insert into courses table
-                // No user_id is included in the query or values
-                $stmtCourse = $conn->prepare("INSERT INTO courses (id, name, title, summary, thumbnail) VALUES (?, ?, ?, ?, ?)");
-                $stmtCourse->execute([$courseId, $courseName, $courseTitle, $courseSummary, $courseThumbnail]);
-                
-                // 2. Insert into modules and quizzes tables
-                $moduleOrder = 1;
-                foreach ($modules as $module) {
-                    $moduleName = trim($module['module_name'] ?? '');
-                    $contentType = trim($module['content_type'] ?? '');
-                    $content = trim($module['content'] ?? '');
-                    $quizzes = $module['quizzes'] ?? [];
+                    // 1. Insert into courses table
+                    $stmtCourse = $conn->prepare("INSERT INTO courses (id, name, title, summary, thumbnail) VALUES (?, ?, ?, ?, ?)");
+                    $stmtCourse->execute([$courseId, $courseName, $courseTitle, $courseSummary, $courseThumbnail]);
+                    
+                    // 2. Insert into modules and quizzes tables
+                    $moduleOrder = 1;
+                    foreach ($modules as $module) {
+                        $moduleName = trim($module['module_name'] ?? '');
+                        $quizzes = $module['quizzes'] ?? [];
 
-                    if (!empty($moduleName) && !empty($contentType) && !empty($content)) {
-                        $stmtModule = $conn->prepare("INSERT INTO modules (course_id, module_name, module_order, content_type, content) VALUES (?, ?, ?, ?, ?)");
-                        $stmtModule->execute([$courseId, $moduleName, $moduleOrder, $contentType, $content]);
-                        $moduleId = $conn->lastInsertId();
+                        if (!empty($moduleName)) { 
+                            $stmtModule = $conn->prepare("INSERT INTO modules (course_id, module_name, module_order) VALUES (?, ?, ?)");
+                            $stmtModule->execute([$courseId, $moduleName, $moduleOrder]);
+                            $moduleId = $conn->lastInsertId();
 
-                        // Insert quizzes for the current module
-                        foreach ($quizzes as $quiz) {
-                            $question = trim($quiz['question'] ?? '');
-                            $correctAnswer = trim($quiz['correct_answer'] ?? '');
-                            $options = array_map('trim', explode(',', $quiz['options'] ?? ''));
-                            
-                            if (!empty($question) && !empty($correctAnswer) && !empty($options)) {
-                                // Add correct answer to options if not present
-                                if (!in_array($correctAnswer, $options)) {
-                                    $options[] = $correctAnswer;
+                            // Insert quizzes for the current module
+                            foreach ($quizzes as $quiz) {
+                                $question = trim($quiz['question'] ?? '');
+                                $correctAnswer = trim($quiz['correct_answer'] ?? '');
+                                $options = array_map('trim', explode(',', $quiz['options'] ?? ''));
+                                
+                                if (!empty($question) && !empty($correctAnswer) && !empty($options)) {
+                                    // Add correct answer to options if not present
+                                    if (!in_array($correctAnswer, $options)) {
+                                        $options[] = $correctAnswer;
+                                    }
+                                    shuffle($options); // Shuffle options
+                                    $optionsJson = json_encode($options);
+
+                                    $stmtQuiz = $conn->prepare("INSERT INTO quizzes (module_id, question, correct_answer, options) VALUES (?, ?, ?, ?)");
+                                    $stmtQuiz->execute([$moduleId, $question, $correctAnswer, $optionsJson]);
                                 }
-                                shuffle($options); // Shuffle options
-                                $optionsJson = json_encode($options);
-
-                                $stmtQuiz = $conn->prepare("INSERT INTO quizzes (module_id, question, correct_answer, options) VALUES (?, ?, ?, ?)");
-                                $stmtQuiz->execute([$moduleId, $question, $correctAnswer, $optionsJson]);
                             }
                         }
+                        $moduleOrder++;
                     }
-                    $moduleOrder++;
-                }
 
-                // Commit the transaction
-                $conn->commit();
-                
-                // Redirect on success
-                header("Location: dashboard.php?course_status=success");
-                exit();
+                    // 3. Insert into enrollments table for the user
+                    $stmtEnrollment = $conn->prepare("INSERT INTO enrollments (user_id, course_id) VALUES (?, ?)");
+                    $stmtEnrollment->execute([$userId, $courseId]);
+
+                    // Commit the transaction
+                    $conn->commit();
+                    
+                    // Redirect on success
+                    header("Location: dashboard.php?course_status=success");
+                    exit();
+                }
+            } catch (PDOException $e) {
+                $conn->rollBack();
+                $errorMessage = "Database error: " . $e->getMessage();
             }
-        } catch (PDOException $e) {
-            $conn->rollBack();
-            $errorMessage = "Database error: " . $e->getMessage();
         }
     }
 }
@@ -324,18 +331,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label>Module Name</label>
                             <input type="text" name="modules[${moduleIndex}][module_name]" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Content Type</label>
-                            <select name="modules[${moduleIndex}][content_type]" required>
-                                <option value="video">Video</option>
-                                <option value="text">Text</option>
-                                <option value="link">Link</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Content (Video URL, Text, or Link)</label>
-                            <textarea name="modules[${moduleIndex}][content]" rows="4" required></textarea>
                         </div>
                         
                         <h4>Quizzes</h4>
