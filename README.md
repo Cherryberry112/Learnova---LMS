@@ -4,7 +4,7 @@
 **Learnova** is a professional-grade educational platform built to provide a seamless learning experience. It serves three distinct user roles—**Students, Instructors, and Administrators**—each with a tailored dashboard and specific functional capabilities.
 
 
-### 🚀 Core Features & Role-Based Access
+###  Core Features & Role-Based Access
 
 #### 🔹 Student Experience
 
@@ -31,35 +31,35 @@
 
 ```text
 📁 Learnova-LMS-Platform
-├── 📁 course
-    ├── 📄 login.php            <-- login page design
-    ├── 📄 login.php            <-- login page design 
-    ├── 📄 login.php            <-- login page design
-    ├── 📄 login.php            <-- login page design
-    ├── 📄 login.php            <-- login page design
-    ├── 📄 login.php            <-- login page design
-    ├── 📄 login.php            <-- login page design  
+├── 📁 Website Gallery      <-- Visual previews of the various dashboards
+└── 📁 course                        <-- Course module directory
+    ├── 📄 all_courses.php           <-- Page displaying a catalog/list of all available courses
+    ├── 📄 course.php                <-- Main logic or class definition file for course objects
+    ├── 📄 course_page.css           <-- Stylesheet specific to the course viewing interface
+    ├── 📄 course_page.php           <-- The main page where students view course content/lessons
+    ├── 📄 enroll_process.php        <-- Backend script to process a user's enrollment in a course
+    ├── 📄 generate_certificate.php  <-- Script to generate a certificate upon course completion
+    ├── 📄 submit_quiz.php           <-- Backend script to process and grade quiz submissions 
 ├── 📁 image                <-- Assets used in index.php (logos, banners, icons)
 ├── 📁 mail                 <-- PHP mailer(a setup to send a welcome message to a new user) 
-├── 📁 Website Gallery      <-- Visual previews of the various dashboards
 ├── 📁 sql                  <-- Complete MySQL schema for local import
 ├── 📄 Create_course.php    <-- create new course , accessible by admin and instructors 
-├── 📄 dashboard.php        <-- profile dashboard for all the users
-├── 📄 index.php            <-- Main entrance of the web application
-├── 📄 login.php            <-- login page design 
-├── 📄 login_process.php    <-- Role based login managment 
-├── 📄 logout.php    <-- Main entrance of the web application
-├── 📄 profile.php    <-- Main entrance of the web application
-├── 📄 session_check.php    <-- Main entrance of the web application
-├── 📄 signup.php    <-- Main entrance of the web application
-├── 📄 index.php    <-- Main entrance of the web application
-├── 📄 index.php    <-- Main entrance of the web application
-├── 📄 index.php    <-- Main entrance of the web application
-├── 📄 index.php    <-- Main entrance of the web application
-├── 📄 index.php    <-- Main entrance of the web application
-├── 📄 index.php    <-- Main entrance of the web application
-├── 📄 index.php    <-- Main entrance of the web application
-└── 📄 update_profile.php <-- Complete MySQL schema for local import
+├── 📄 dashboard.php           <-- Main user dashboard after logging in
+├── 📄 dbconnection.php        <-- Database connection configuration file
+├── 📄 faq.php                 <-- Frequently Asked Questions page
+├── 📄 footer.php              <-- Reusable footer component included in other pages
+├── 📄 header.php              <-- Reusable header/navigation component
+├── 📄 index.php               <-- The main homepage/landing page of the website
+├── 📄 login.php               <-- Login page design and form
+├── 📄 login_process.php       <-- Backend script to handle login authentication
+├── 📄 logout.php              <-- Script to destroy the session and log the user out
+├── 📄 password_generator.php  <-- extra file that generates random password(can be used to build a new entry in database)
+├── 📄 profile.php             <-- Page displaying the user's profile information
+├── 📄 session_check.php       <-- Middleware script to verify if a user is logged in
+├── 📄 signup.php              <-- Registration page design and form
+├── 📄 signup_process.php      <-- Backend script to handle user registration
+├── 📄 style.css               <-- Main stylesheet containing CSS for the site
+└── 📄 update_profile.php      <-- Form or logic to edit/update user profile details
 
 ```
 
